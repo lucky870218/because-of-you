@@ -74,10 +74,10 @@
     <script>
         // 1. 從網址取得參數 id (例如 result.html?id=1)
         const urlParams = new URLSearchParams(window.location.search);
-        const id = urlParams.get('id') || '1'; // 若抓不到參數，預設顯示 1.jpg
+        const id = urlParams.get('id') || '1'; // 若抓不到參數，預設顯示 1.png
 
         // 2. 設定圖片路徑
-        const imgPath = `images/${id}.jpg`;
+        const imgPath = `images/${id}.png`;
         const imgElement = document.getElementById('result-img');
         const downloadLink = document.getElementById('download-link');
 
