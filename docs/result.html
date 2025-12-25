@@ -31,7 +31,6 @@
             width: 200px; transition: 0.3s; color: white; border: none; font-weight: bold;
         }
         .download { background-color: #ffb6c1; }
-        .share-fb { background-color: #1877F2; }
         .share-line { background-color: #06C755; }
         .back { background-color: transparent; color: #888; border: 1px solid #ccc; }
         
@@ -51,8 +50,6 @@
         <a id="download-link" class="btn download" download>下載圖片保存</a>
         
         <a id="line-share" class="btn share-line" target="_blank">分享到 LINE</a>
-        
-        <a id="fb-share" class="btn share-fb" target="_blank">分享到 Facebook</a>
 
         <a href="index.html" class="btn back">重新測一次</a>
     </div>
@@ -70,12 +67,16 @@
         // 設定下載連結
         downloadLink.href = imgPath;
 
-        // 設定 LINE 分享連結 (文字 + 網址)
-        const lineText = encodeURIComponent("我測出了我的特質，你也來試試看吧！");
-        document.getElementById('line-share').href = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(currentUrl)}&text=${lineText}`;
+        // 修改原本的 LINE 分享邏輯
+        const lineShareBtn = document.getElementById('line-share');
+        // 這裡要把網址指向對應的 r1.html, r2.html 或 r3.html
+        const shareUrl = `https://lucky870218.github.io/because-of-you/r${id}.html`;
 
-        // 設定 FB 分享連結
-        document.getElementById('fb-share').href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`;
+        lineShareBtn.href = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(shareUrl)}`;
+
+        // 設定 LINE 分享連結 (文字 + 網址)
+        //const lineText = encodeURIComponent("我測出了我的特質，你也來試試看吧！");
+        //document.getElementById('line-share').href = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(currentUrl)}&text=${lineText}`;
 
         // 圖片載入邏輯
         imgElement.onload = function() {
