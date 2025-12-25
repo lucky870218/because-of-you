@@ -5,30 +5,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>你的特質結果 - 因為有你</title>
     <style>
-        /* 基礎版面設定 */
         body { 
             font-family: "PingFang TC", "Microsoft JhengHei", sans-serif; 
             text-align: center; 
             padding: 20px; 
-            background-color: #fffafb; /* 淡淡的粉白色背景 */
+            background-color: #fffafb; 
             color: #444;
         }
         
-        h2 { margin-top: 30px; letter-spacing: 2px; }
+        h2 { margin-top: 30px; letter-spacing: 2px; color: #ff8c94; }
 
-        /* 圖片樣式 */
+        /* 圖片容器：固定最小高度防止載入時內容跳動 */
+        .image-wrapper {
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
         #result-img { 
             max-width: 90%; 
             height: auto; 
             border-radius: 15px; 
-            margin: 20px 0; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            display: none; /* 預設隱藏，等載入完才顯示 */
         }
 
-        /* 按鈕容器 */
-        .action-container { margin-top: 20px; }
+        /* Loading 轉圈圈樣式 */
+        .loader {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #ffb6c1;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
 
-        /* 下載按鈕與返回按鈕樣式 */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 按鈕樣式 */
+        .action-container { margin-top: 20px; }
         .btn { 
             display: inline-block; 
             padding: 12px 30px; 
@@ -38,22 +58,9 @@
             font-size: 16px;
             transition: 0.3s;
         }
-
-        .download { 
-            background-color: #ffb6c1; 
-            color: white; 
-            border: none;
-            cursor: pointer;
-        }
-
+        .download { background-color: #ffb6c1; color: white; border: none; cursor: pointer; }
         .download:hover { background-color: #ff8c94; }
-
-        .back { 
-            background-color: transparent; 
-            color: #888; 
-            border: 1px solid #ccc; 
-        }
-
+        .back { background-color: transparent; color: #888; border: 1px solid #ccc; }
         .back:hover { background-color: #eee; }
     </style>
 </head>
@@ -61,7 +68,8 @@
 
     <h2>這是屬於你的特質</h2>
     
-    <div>
+    <div class="image-wrapper">
+        <div id="loading-spinner" class="loader"></div>
         <img id="result-img" src="" alt="特質圖片">
     </div>
 
@@ -72,18 +80,33 @@
     </div>
 
     <script>
-        // 1. 從網址取得參數 id (例如 result.html?id=1)
         const urlParams = new URLSearchParams(window.location.search);
-        const id = urlParams.get('id') || '1'; // 若抓不到參數，預設顯示 1.png
+        const id = urlParams.get('id') || '1';
+        const imgPath = `./images/${id}.png`;
 
-        // 2. 設定圖片路徑
-        const imgPath = `images/${id}.png`;
         const imgElement = document.getElementById('result-img');
+        const spinner = document.getElementById('loading-spinner');
         const downloadLink = document.getElementById('download-link');
 
-        // 3. 將路徑套用到圖片標籤與下載連結
-        imgElement.src = imgPath;
+        // 設定下載連結
         downloadLink.href = imgPath;
+
+        // 當圖片「真正下載完成」後觸發
+        imgElement.onload = function() {
+            spinner.style.display = 'none';      // 隱藏轉圈圈
+            imgElement.style.display = 'inline-block'; // 顯示圖片
+        };
+
+        // 處理圖片找不到的情況
+        imgElement.onerror = function() {
+            spinner.innerHTML = "圖片載入失敗";
+            spinner.style.animation = "none";
+            spinner.style.border = "none";
+            spinner.style.width = "auto";
+        };
+
+        // 最後才設定 src 開始抓圖
+        imgElement.src = imgPath;
     </script>
 </body>
 </html>
