@@ -39,7 +39,7 @@
             max-width: 85%;
         }
 
-        h1 { font-size: 2.2rem; margin-bottom: 10px; color: #ff6b6b; }
+        h1 { font-size: 2.2rem; margin-bottom: 10px; color: #ff6969; }
         p { font-size: 1.1rem; color: #444; margin-bottom: 30px; line-height: 1.6; }
         
         .btn-container { display: flex; flex-direction: column; align-items: center; }
@@ -64,12 +64,13 @@
 
     <div class="content-overlay">
         <h1>因為有你</h1>
-        <p>你身體中 21% 的<br>特質是什麼 ?</p>
+        <p>這個世界多了點什麼 ?</p>
 
         <div class="btn-container">
-            <button onclick="goToResult(1)">1. 一點溫柔</button>
-            <button onclick="goToResult(2)">2. 一點固執</button>
-            <button onclick="goToResult(3)">3. 一點幽默</button>
+            <button onclick="goToResult(1)">1. 多一點理解</button>
+            <button onclick="goToResult(2)">2. 多一點包容</button>
+            <button onclick="goToResult(3)">3. 多一點陪伴</button>
+            <button onclick="goToResult(4)">4. 多一點幽默</button>
         </div>
     </div>
 
@@ -106,7 +107,7 @@
         // 預載入圖片邏輯保持不變
         window.onload = function() {
             setTimeout(function() {
-                const imagesToPreload = ["images/1.jpg", "images/2.jpg", "images/3.jpg"];
+                const imagesToPreload = ["images/1.jpg", "images/2.jpg", "images/3.jpg", "images/4.jpg"];
                 imagesToPreload.forEach(function(src) {
                     const img = new Image();
                     img.src = src;
