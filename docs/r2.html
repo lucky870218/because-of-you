@@ -16,11 +16,8 @@
             text-align: center; padding: 20px; background-color: #fffafb; color: #444; margin: 0;
         }
         .container { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 90vh; }
-        
         img { max-width: 90%; border-radius: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); margin-bottom: 20px; }
-
         .btn-group { display: flex; flex-direction: column; align-items: center; width: 100%; }
-        
         .btn { 
             display: inline-block; padding: 12px 25px; margin: 8px; 
             text-decoration: none; border-radius: 30px; font-size: 16px; 
@@ -28,10 +25,11 @@
         }
         .download { background-color: #ffb6c1; }
         .share-line { background-color: #06C755; }
-        /* 重新測試按鈕樣式 */
         .back { background-color: transparent; color: #888; border: 1px solid #ccc; }
-
         .btn:hover { opacity: 0.8; transform: scale(1.05); }
+
+        /* 關鍵：預設隱藏分享與重測按鈕，由 JS 判斷是否顯示 */
+        #line-share, #restart-btn { display: none; }
     </style>
 </head>
 <body>
@@ -43,22 +41,38 @@
             <a href="images/2.png" class="btn download" download="我的特質_一點固執.png">下載圖片保存</a>
             
             <a id="line-share" class="btn share-line" target="_blank">分享給好友</a>
-            
-            <a href="index.html?from=qrcode" class="btn back">重新測一次</a>
+            <a id="restart-btn" href="index.html?from=qrcode" class="btn back">重新測一次</a>
         </div>
     </div>
 
     <script>
-        // 設定 LINE 分享連結
-        const currentUrl = window.location.href;
-        //const lineText = encodeURIComponent("我身體中 21% 的特質是：一點固執！你也來測測看吧！");
-        document.getElementById('line-share').href = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(currentUrl)}`;
+        // 1. 取得網址參數
+        const urlParams = new URLSearchParams(window.location.search);
+        const isShareMode = urlParams.get('mode') === 'share';
 
-        // 防止按上一頁回到 index (鎖死邏輯)
-        history.pushState(null, null, document.URL);
-        window.addEventListener('popstate', function () {
+        const lineBtn = document.getElementById('line-share');
+        const restartBtn = document.getElementById('restart-btn');
+
+        // 2. 判斷身分
+        if (!isShareMode) {
+            // 如果不是分享模式 (代表是測驗者本人從 index 跳過來的)
+            lineBtn.style.display = 'inline-block';
+            restartBtn.style.display = 'inline-block';
+
+            // 設定給好友的分享網址，加上 mode=share 參數
+            const baseUrl = window.location.href.split('?')[0]; // 取得不帶參數的網址
+            const shareUrlForFriend = `${baseUrl}?mode=share`;
+            lineBtn.href = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(shareUrlForFriend)}`;
+            
+            // 只有測驗者本人才需要鎖死「上一頁」
             history.pushState(null, null, document.URL);
-        });
+            window.addEventListener('popstate', function () {
+                history.pushState(null, null, document.URL);
+            });
+        } else {
+            // 如果是分享模式 (親友點開)，就只會看到「下載圖片保存」
+            console.log("親友模式：隱藏分享與重測功能");
+        }
     </script>
 </body>
 </html>
