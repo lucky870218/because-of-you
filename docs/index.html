@@ -74,9 +74,34 @@
     </div>
 
     <script>
-        function goToResult(id) {
-            window.location.href = `result.html?id=${id}`;
+
+        // 1. 取得網址參數，判斷是否為重新掃碼
+        const urlParams = new URLSearchParams(window.location.search);
+        const isNewScan = urlParams.get('from') === 'qrcode';
+
+        // 2. 如果是重新掃碼，清空之前的選擇紀錄
+        if (isNewScan) {
+            localStorage.removeItem('has_selected');
         }
+
+        // 3. 檢查是否有選擇過
+        const savedId = localStorage.getItem('has_selected');
+        if (savedId) {
+            // 如果有紀錄且不是重新掃碼，直接鎖死在對應的結果頁
+            window.location.replace(`r${savedId}.html`);
+        }
+
+        // 4. 按鈕點選後的動作
+        function goToResult(id) {
+            // 永久存入手機瀏覽器 (即使關掉分頁也會在)
+            localStorage.setItem('has_selected', id);
+            // 使用 replace 取代紀錄，讓「上一頁」按鈕無效化
+            window.location.replace(`r${id}.html`);
+        }
+
+        //function goToResult(id) {
+        //   window.location.href = `result.html?id=${id}`;
+        //}
 
         // 預載入圖片邏輯保持不變
         window.onload = function() {
