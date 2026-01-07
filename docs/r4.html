@@ -67,7 +67,7 @@
 
             // --- 修改這裡 ---
             // 使用 LINE 穩定的文字分享介面，將網址放在文字訊息中
-            const message = encodeURIComponent("這個世界因為有你，而多出的那份專屬溫柔：\n" + shareUrlForFriend);
+            const message = encodeURIComponent(shareUrlForFriend);
             lineBtn.href = `https://line.naver.jp/R/msg/text/?${message}`;
             
             // 只有測驗者本人才需要鎖死「上一頁」

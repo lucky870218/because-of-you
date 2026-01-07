@@ -66,8 +66,10 @@
             // 原本寫法
             // lineBtn.href = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(shareUrlForFriend)}`;
 
-            // 建議的寫法 (LINE Universal Link)：
-            lineBtn.href = `https://line.me/R/share?url=${encodeURIComponent(shareUrlForFriend)}`;
+            // --- 修改這裡 ---
+            // 使用 LINE 穩定的文字分享介面，將網址放在文字訊息中
+            const message = encodeURIComponent(shareUrlForFriend);
+            lineBtn.href = `https://line.naver.jp/R/msg/text/?${message}`;
             
             // 只有測驗者本人才需要鎖死「上一頁」
             history.pushState(null, null, document.URL);
