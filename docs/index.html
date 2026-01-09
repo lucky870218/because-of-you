@@ -78,7 +78,7 @@
 
         // 1. 取得網址參數，判斷是否為重新掃碼
         const urlParams = new URLSearchParams(window.location.search);
-        const isNewScan = urlParams.get('from') === 'qrcode';
+        const isNewScan = urlParams.get('from') === 'pgy';
 
         // 2. 如果是重新掃碼，清空紀錄
         if (isNewScan) {
