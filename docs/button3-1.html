@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>因為有你 - 這個世界多一點幽默</title>
+    <title>因為有你 - 這個世界多一點陪伴</title>
 
-    <meta property="og:title" content="因為有你，這個世界多一點幽默" />
+    <meta property="og:title" content="因為有你，這個世界多一點陪伴" />
     <meta property="og:description" content="點擊查看，這個世界因為有你，而多出的那份專屬溫柔。" />
-    <meta property="og:image" content="https://lucky870218.github.io/because-of-you/images/4.png" />
+    <meta property="og:image" content="https://lucky870218.github.io/because-of-you/images/3-1.png" />
     <meta property="og:type" content="website" />
 
     <style>
@@ -35,42 +35,39 @@
 <body>
 
     <div class="container">
-        <img src="images/4.png" alt="因為有你_圖片">
+        <img src="images/3-1.png" alt="因為有你_圖片">
         
         <div class="btn-group">
-            <a href="images/4.png" class="btn download" download="這個世界_多一點幽默.png">下載圖片保存</a>
+            <a href="images/3-1.png" class="btn download" download="這個世界_多一點陪伴.png">下載圖片保存</a>
             
             <a id="line-share" class="btn share-line" target="_blank">分享給好友</a>
-            <a id="restart-btn" href="index.html?from=qrcode" class="btn back">重新測一次</a>
+            <a id="restart-btn" href="index.html?from=pgy" class="btn back">重新測一次</a>
         </div>
     </div>
 
     <script>
-        // 1. 取得網址參數
         const urlParams = new URLSearchParams(window.location.search);
         const isShareMode = urlParams.get('mode') === 'share';
-
         const lineBtn = document.getElementById('line-share');
         const restartBtn = document.getElementById('restart-btn');
 
-        // 2. 判斷身分
         if (!isShareMode) {
-            // 如果不是分享模式 (代表是測驗者本人從 index 跳過來的)
+            // 【測驗者本人模式】
             lineBtn.style.display = 'inline-block';
             restartBtn.style.display = 'inline-block';
 
-            // 設定給好友的分享網址，加上 mode=share 參數
-            const baseUrl = window.location.href.split('?')[0]; // 取得不帶參數的網址
-            const shareUrlForFriend = `${baseUrl}?mode=share`;
-            // 原本寫法
-            // lineBtn.href = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(shareUrlForFriend)}`;
+            // 2. 製作分享連結 (方案 B 的優化版)
+            // window.location.origin + window.location.pathname 會取得不含參數的完整 URL
+            const cleanUrl = window.location.origin + window.location.pathname;
+            const shareUrlForFriend = `${cleanUrl}?mode=share`;
 
-            // --- 修改這裡 ---
-            // 使用 LINE 穩定的文字分享介面，將網址放在文字訊息中
+            // 3. 設定 LINE 分享文字 (建議加上一段吸引人的標題)
+            //const title = "因為有你，這個世界多一點理解";
+            //const message = encodeURIComponent(`${title}\n${shareUrlForFriend}`);
             const message = encodeURIComponent(shareUrlForFriend);
             lineBtn.href = `https://line.naver.jp/R/msg/text/?${message}`;
             
-            // 只有測驗者本人才需要鎖死「上一頁」
+            // 4. 鎖定上一頁
             history.pushState(null, null, document.URL);
             window.addEventListener('popstate', function () {
                 history.pushState(null, null, document.URL);
@@ -79,6 +76,7 @@
             // 如果是分享模式 (親友點開)，就只會看到「下載圖片保存」
             console.log("親友模式：隱藏分享與重測功能");
         }
+
     </script>
 </body>
 </html>

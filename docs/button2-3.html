@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>因為有你 - 這個世界多一點包容</title>
+
+    <meta property="og:title" content="因為有你，這個世界多一點包容" />
+    <meta property="og:description" content="點擊查看，這個世界因為有你，而多出的那份專屬溫柔。" />
+    <meta property="og:image" content="https://lucky870218.github.io/because-of-you/images/2-2.png" />
+    <meta property="og:type" content="website" />
+
+    <style>
+        body { 
+            font-family: "PingFang TC", "Microsoft JhengHei", sans-serif; 
+            text-align: center; padding: 20px; background-color: #fffafb; color: #444; margin: 0;
+        }
+        .container { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 90vh; }
+        img { max-width: 90%; border-radius: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .btn-group { display: flex; flex-direction: column; align-items: center; width: 100%; }
+        .btn { 
+            display: inline-block; padding: 12px 25px; margin: 8px; 
+            text-decoration: none; border-radius: 30px; font-size: 16px; 
+            width: 200px; transition: 0.3s; color: white; border: none; font-weight: bold;
+        }
+        .download { background-color: #ffb6c1; }
+        .share-line { background-color: #06C755; }
+        .back { background-color: transparent; color: #888; border: 1px solid #ccc; }
+        .btn:hover { opacity: 0.8; transform: scale(1.05); }
+
+        /* 關鍵：預設隱藏分享與重測按鈕，由 JS 判斷是否顯示 */
+        #line-share, #restart-btn { display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <img src="images/2-2.png" alt="因為有你_圖片">
+        
+        <div class="btn-group">
+            <a href="images/2-2.png" class="btn download" download="這個世界_多一點包容.png">下載圖片保存</a>
+            
+            <a id="line-share" class="btn share-line" target="_blank">分享給好友</a>
+            <a id="restart-btn" href="index.html?from=pgy" class="btn back">重新測一次</a>
+        </div>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const isShareMode = urlParams.get('mode') === 'share';
+        const lineBtn = document.getElementById('line-share');
+        const restartBtn = document.getElementById('restart-btn');
+
+        if (!isShareMode) {
+            // 【測驗者本人模式】
+            lineBtn.style.display = 'inline-block';
+            restartBtn.style.display = 'inline-block';
+
+            // 2. 製作分享連結 (方案 B 的優化版)
+            // window.location.origin + window.location.pathname 會取得不含參數的完整 URL
+            const cleanUrl = window.location.origin + window.location.pathname;
+            const shareUrlForFriend = `${cleanUrl}?mode=share`;
+
+            // 3. 設定 LINE 分享文字 (建議加上一段吸引人的標題)
+            //const title = "因為有你，這個世界多一點理解";
+            //const message = encodeURIComponent(`${title}\n${shareUrlForFriend}`);
+            const message = encodeURIComponent(shareUrlForFriend);
+            lineBtn.href = `https://line.naver.jp/R/msg/text/?${message}`;
+            
+            // 4. 鎖定上一頁
+            history.pushState(null, null, document.URL);
+            window.addEventListener('popstate', function () {
+                history.pushState(null, null, document.URL);
+            });
+        } else {
+            // 如果是分享模式 (親友點開)，就只會看到「下載圖片保存」
+            console.log("親友模式：隱藏分享與重測功能");
+        }
+
+    </script>
+</body>
+</html>
