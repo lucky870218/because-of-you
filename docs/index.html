@@ -80,40 +80,45 @@
         const urlParams = new URLSearchParams(window.location.search);
         const isNewScan = urlParams.get('from') === 'qrcode';
 
-        // 2. 如果是重新掃碼，清空之前的選擇紀錄
+        // 2. 如果是重新掃碼，清空紀錄
         if (isNewScan) {
-            localStorage.removeItem('has_selected');
+            localStorage.removeItem('selected_file');
         }
 
         // 3. 檢查是否有選擇過
-        const savedId = localStorage.getItem('has_selected');
-        if (savedId) {
-            // 如果有紀錄且不是重新掃碼，直接鎖死在對應的結果頁
-            window.location.replace(`r${savedId}.html`);
+        const savedFile = localStorage.getItem('selected_file');
+        if (savedFile) {
+            // 如果有紀錄，直接鎖死在當初那個特定的 HTML 檔案
+            window.location.replace(savedFile);
         }
 
-        // 4. 按鈕點選後的動作
+        // 4. 修改後的跳轉函數
         function goToResult(id) {
-            // 永久存入手機瀏覽器 (即使關掉分頁也會在)
-            localStorage.setItem('has_selected', id);
-            // 使用 replace 取代紀錄，讓「上一頁」按鈕無效化
-            window.location.replace(`r${id}.html`);
+            // 隨機產生 1, 2, 3 其中一個
+            const randomImgIndex = Math.floor(Math.random() * 3) + 1;
+            
+            // 組合成目標檔名，例如 "button1-2.html"
+            const targetFile = `button${id}-${randomImgIndex}.html`;
+
+            // 儲存檔名，確保下次進來直接跳轉到這個檔案
+            localStorage.setItem('selected_file', targetFile);
+
+            // 執行跳轉
+            window.location.replace(targetFile);
         }
 
-        //function goToResult(id) {
-        //   window.location.href = `result.html?id=${id}`;
-        //}
-
-        // 預載入圖片邏輯保持不變
+        // 預載入圖片邏輯 (保持 1-1.jpg 到 4-3.jpg)
         window.onload = function() {
             setTimeout(function() {
-                const imagesToPreload = ["images/1.jpg", "images/2.jpg", "images/3.jpg", "images/4.jpg"];
-                imagesToPreload.forEach(function(src) {
-                    const img = new Image();
-                    img.src = src;
-                });
+                for (let i = 1; i <= 4; i++) {
+                    for (let j = 1; j <= 3; j++) {
+                        const img = new Image();
+                        img.src = `images/${i}-${j}.jpg`;
+                    }
+                }
             }, 1000);
         };
+
     </script>
 </body>
 </html>
